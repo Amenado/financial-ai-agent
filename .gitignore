@@ -1,0 +1,11 @@
+# Python / Backend
+venv/
+__pycache__/
+*.pyc
+
+# Next.js / Frontend
+frontend/node_modules/
+frontend/.next/
+
+# Çevre Değişkenleri (Şifreler/API Keyler için)
+.env
