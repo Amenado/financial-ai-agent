@@ -17,7 +17,7 @@ export default function Home() {
 
     try {
       // Bizim FastAPI backend sunucumuza istek atıyoruz
-      const res = await fetch(`http://localhost:8000/api/analyze/${symbol.toUpperCase()}`);
+      const res = await fetch(`https://financial-ai-agent-4hb3.onrender.com`);
       if (!res.ok) {
         throw new Error('Analiz istenirken bir hata oluştu. Sunucu açık mı?');
       }
