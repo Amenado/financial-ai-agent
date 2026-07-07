@@ -1,10 +1,11 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-
+import traceback
 # Kendi yazdığımız modülleri içeri aktarıyoruz
 from data_pipeline.market_data import fetch_asset_data
 from agents.crew_runner import run_financial_analysis
-
+import os
+print(f"DEBUG: SERPER_API_KEY durumu: {'Mevcut' if os.getenv('SERPER_API_KEY') else 'BOŞ'}")
 app = FastAPI(title="FAA (Financial AI Agent) API")
 
 # Next.js arayüzünün erişebilmesi için CORS izinleri
@@ -41,5 +42,11 @@ def analyze_asset(symbol: str):
         
         # CrewAI'nin sonucunu string'e (metne) çevirip gönderiyoruz
         return {"status": "success", "symbol": symbol, "report": str(ai_report)}
+    
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Yapay zeka analizi sırasında hata oluştu: {e}")
+        # Hata olduğunda hatanın tüm teknik detayını loglara basıyoruz
+        error_trace = traceback.format_exc()
+        print(f"--- HATA DETAYI BAŞLIYOR ---\n{error_trace}\n--- HATA DETAYI BİTİYOR ---")
+        
+        # Kullanıcıya/Frontend'e giden hata mesajı
+        raise HTTPException(status_code=500, detail=f"Yapay zeka analizi sırasında hata oluştu: {str(e)}")
